@@ -17,6 +17,7 @@ class GenerationProcess(BaseProcess):
         modality_generator = get_generator(params.modality)
         
         fieldnames = params.fieldnames.split(',') if params.fieldnames else None
+
         
         if params.exclude_cols:
             exclude_cols = [

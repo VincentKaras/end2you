@@ -6,7 +6,7 @@ sys.path.append("..")
 from pathlib import Path
 from torch.utils.data import Dataset
 from torch import is_tensor
-from data_generator.file_reader import FileReader
+from end2you.data_generator.file_reader import FileReader
 
 
 class BaseProvider(Dataset):
@@ -41,7 +41,7 @@ class BaseProvider(Dataset):
             self.data_files.append(
                 file_provider(raw_file, label_file, seq_length, reader, fps, *args, **kwargs))
         
-        assert len(self.data_files) > 0, f'No files found in [{dataset_path}]. Check `dataset_path`.'
+        assert len(self.data_files) > 0 #, f'No files found in [{dataset_path}]. Check `dataset_path`.'
 
         self.num_files = len(self.data_files)
         self.total_num_seqs = np.ceil(self._get_total_num_seqs())

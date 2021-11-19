@@ -7,7 +7,7 @@ from pathlib import Path
 from torch import is_tensor
 from moviepy.editor import VideoFileClip
 from .raw_file_provider import RawFileProvider
-from data_generator.face_extractor import FaceExtractor
+from end2you.data_generator.face_extractor import FaceExtractor
 
 
 class VisualFileProvider(RawFileProvider):
