@@ -2,7 +2,8 @@ import numpy as np
 import h5py
 
 from pathlib import Path
-from moviepy.editor import AudioFileClip
+#from moviepy.editor import AudioFileClip
+import soundfile
 from .generator import Generator
 from .file_reader import FileReader
 
@@ -47,21 +48,29 @@ class AudioGenerator(Generator):
         
         seq_num = labels.shape[0] - 1
         
-        clip = AudioFileClip(str(data_file), fps=self.fps)
+        #clip = AudioFileClip(str(data_file), fps=self.fps)
         
         num_samples = int(self.fps * (timestamps[1] - timestamps[0]))
+        assert num_samples > 0, "Frame length is not positive: {}".format(num_samples)
         frames = []        
         for i in range(len(timestamps) - 1):
             start_time = timestamps[i]
             end_time = timestamps[i + 1]
             
-            data_frame = np.array(
-                list(clip.subclip(start_time, end_time).iter_frames()))
-            data_frame = data_frame.mean(1)[:num_samples]
-            
+            #data_frame = np.array(
+            #    list(clip.subclip(start_time, end_time).iter_frames()))
+            #data_frame = data_frame.mean(1)[:num_samples]
+
+            data_frame, sr = soundfile.read(str(data_file), start=int(start_time * self.fps), frames=num_samples)
+            assert sr == self.fps
+            # get rid of stereo by averaging the 2 channels
+            if len(data_frame.shape) == 2:
+                data_frame = data_frame.mean(axis=1)
+
             if data_frame.shape[0] < num_samples:
-                data_frame = np.pad(data_frame, 
+                data_frame = np.pad(data_frame,
                     (0, num_samples - data_frame.shape[0] % num_samples), 'constant')
+            assert data_frame.shape[0] == num_samples, "Frame {} has length {}, should be {}".format(i, data_frame.shape[0], num_samples)
             
             frames.append(data_frame.astype(np.float32))
         

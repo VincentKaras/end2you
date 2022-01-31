@@ -12,6 +12,7 @@ class AudioRNNModel(nn.Module):
                  input_size:int,
                  num_outs:int,
                  pretrained:bool = False,
+                 normalise_audio: bool = False,
                  model_name:str = None):
         """ Convolutional recurrent neural network model.
         
@@ -19,6 +20,7 @@ class AudioRNNModel(nn.Module):
             input_size (int): Input size to the model. 
             num_outs (int): Number of output values of the model.
             pretrained (bool): Use pretrain model (default `False`).
+            normalise_audio (bool): Normalise the audio clip fed to the model (default "False")
             model_name (str): Name of model to build (default `None`).
         """
         
@@ -29,6 +31,10 @@ class AudioRNNModel(nn.Module):
         self.rnn, num_out_features = self._get_rnn_model(num_out_features)
         self.linear = nn.Linear(num_out_features, num_outs)
         self.num_outs = num_outs
+
+        self.normalise_audio = normalise_audio
+        #if self.normalise_audio:
+
 
     def _get_rnn_model(self, input_size:int):
         """ Builder method to get RNN instace."""
@@ -48,6 +54,12 @@ class AudioRNNModel(nn.Module):
         """
         
         batch_size, seq_length, t = x.shape
+
+        # normalise the audio
+        if self.normalise_audio:
+            # Find the max over each audio sequence in the batch and divide by that
+            x = x * 0.7079 / torch.amax(x, dim=(1,2), keepdim=True)
+
         x = x.view(batch_size*seq_length, 1, t)
         
         audio_out = self.audio_model(x)

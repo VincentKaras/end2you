@@ -20,7 +20,6 @@ class AudioModel(nn.Module):
         """
         
         super(AudioModel, self).__init__()
-        
         self.model = self._get_model(model_name)
         self.model = self.model(*args, **kwargs)
         self.num_features = self.model.num_features

@@ -97,6 +97,8 @@ def add_parsers():
                         help='Which visual model to use. (default `resnet18`).')
     parser.add_argument('--pretrained', type=str, default='false',
                         help='Whether to use pretrain (on ImageNet) visual model. (default `false`).')
+
+    parser.add_argument("--normalise_audio", type=str, default="false", help="Normalise the audio input to the audio model. (default no noramlisation")
     
     generation_subparser = subparsers.add_parser('generate', help='Generation arguments.')
     generation_subparser = add_gen_args(generation_subparser)
