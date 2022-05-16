@@ -4,6 +4,8 @@ import torchvision.models as models
 
 from torchvision import transforms
 
+from end2you.models.visual.mobilefacenet import mobile_facenet
+
 
 class VisualModel(nn.Module):
     
@@ -18,18 +20,27 @@ class VisualModel(nn.Module):
         """
         
         super(VisualModel, self).__init__()
-        
-        network = getattr(models, model_name)
-        network = network(pretrained=pretrained)
-        
-        self.num_features = self._get_out_feats(model_name)
-        network = list(network.children())[:-1]
+
         self.pretrained = pretrained
         if pretrained:
             self.normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                 std=[0.229, 0.224, 0.225])
-            
-        self.model = nn.Sequential(*network)
+                                                  std=[0.229, 0.224, 0.225])
+
+        if model_name != "mobilefacenet":
+
+            network = getattr(models, model_name)
+            network = network(pretrained=pretrained)
+
+            self.num_features = self._get_out_feats(model_name)
+            network = list(network.children())[:-1]
+
+            self.model = nn.Sequential(*network)
+
+        else:
+
+            self.num_features = self._get_out_feats(model_name)
+
+            self.model = mobile_facenet(pretrained=pretrained)
     
     @classmethod
     def _get_out_feats(cls, name):
@@ -71,7 +82,9 @@ class VisualModel(nn.Module):
             'shufflenet_v2_x1_5': 9216,
             'shufflenet_v2_x2_0': 18432,
             
-            'alexnet': 9216
+            'alexnet': 9216,
+
+            'mobilefacenet': 512,
             
         }[name]
     
