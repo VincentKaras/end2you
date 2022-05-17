@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torchvision.models as models
+from torchvision.models import mobilenet_v3_small
 
 from torchvision import transforms
 
@@ -26,8 +27,17 @@ class VisualModel(nn.Module):
             self.normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                                   std=[0.229, 0.224, 0.225])
 
-        if model_name != "mobilefacenet":
+        if model_name == "mobilefacenet":
 
+            self.num_features = self._get_out_feats(model_name)
+            self.model = mobile_facenet(pretrained=pretrained)
+        elif model_name == "mobilenet_v3_small_nolast":
+            self.num_features = self._get_out_feats(model_name)
+
+            self.model = mobilenet_v3_small(pretrained=pretrained)
+            self.model.classifier[-1] = nn.Identity()   # replace the final linear layer
+
+        else:
             network = getattr(models, model_name)
             network = network(pretrained=pretrained)
 
@@ -35,12 +45,6 @@ class VisualModel(nn.Module):
             network = list(network.children())[:-1]
 
             self.model = nn.Sequential(*network)
-
-        else:
-
-            self.num_features = self._get_out_feats(model_name)
-
-            self.model = mobile_facenet(pretrained=pretrained)
     
     @classmethod
     def _get_out_feats(cls, name):
@@ -85,6 +89,8 @@ class VisualModel(nn.Module):
             'alexnet': 9216,
 
             'mobilefacenet': 512,
+            "mobilenet_v3_small": 576,
+            "mobilenet_v3_small_nolast": 1024,
             
         }[name]
     
