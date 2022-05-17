@@ -1,0 +1,2 @@
+global-include *.pth.tar
+global-include *.pth
