@@ -62,8 +62,8 @@ class AudioVisualGenerator(Generator):
         clip.audio.set_fps(self.fps)
         
         seq_num = labels.shape[0] - 1
-        visual_num_samples = int(self.fps * (timestamps[1] - timestamps[0]))
-        audio_num_samples = int(self.sr * (timestamps[1] - timestamps[0]))
+        visual_num_samples = int(np.around(self.fps * (timestamps[1] - timestamps[0]), decimals=6))
+        audio_num_samples = int(np.around(self.sr * (timestamps[1] - timestamps[0]), decimals=6))
         
         visual_frames, audio_frames = [], []        
         for i in range(len(timestamps) - 1):

@@ -58,7 +58,7 @@ class VisualGenerator(Generator):
             self.fps = int(clip.fps)
         
         seq_num = labels.shape[0] - 1
-        num_samples = int(self.fps * (timestamps[1] - timestamps[0]))
+        num_samples = int(np.around(self.fps * (timestamps[1] - timestamps[0]), decimals=6))
         
         frames = []        
         for i in range(len(timestamps) - 1):

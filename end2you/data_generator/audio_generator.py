@@ -50,7 +50,7 @@ class AudioGenerator(Generator):
         
         #clip = AudioFileClip(str(data_file), fps=self.fps)
         
-        num_samples = int(self.fps * (timestamps[1] - timestamps[0]))
+        num_samples = int(np.around(self.fps * (timestamps[1] - timestamps[0]), decimals=6))
         assert num_samples > 0, "Frame length is not positive: {}".format(num_samples)
         frames = []        
         for i in range(len(timestamps) - 1):
