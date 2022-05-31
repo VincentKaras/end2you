@@ -10,3 +10,5 @@ End2You.egg-info/
 .ipynb_checkpoints
 *.log
 *.out
+.vscode/*
+tests/*
