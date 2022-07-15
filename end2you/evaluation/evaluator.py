@@ -6,11 +6,7 @@ import sys
 sys.path.append("..")
 
 from end2you.data_provider import get_dataloader
-<<<<<<< HEAD
 from end2you.data_provider.hdf5.base_provider import BaseProvider
-=======
-from end2you.data_provider.hdf5 import BaseProvider
->>>>>>> upstream/master
 from end2you.base import BasePhase
 from end2you.base_process import BaseProcess
 from .metric_provider import MetricProvider
