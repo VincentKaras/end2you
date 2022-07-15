@@ -2,7 +2,6 @@ import numpy as np
 import sys
 sys.path.append("..")
 
-
 from pathlib import Path
 from torch import is_tensor
 from moviepy.editor import VideoFileClip

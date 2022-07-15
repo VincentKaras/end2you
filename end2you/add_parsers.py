@@ -84,7 +84,7 @@ def add_parsers():
     parser.add_argument('--seq_length', type=int, default=None,
                         help="""The sequence length to introduce to the RNN. 
                         If `None` it uses whole sequence as input (default `None`)""")
-    parser.add_argument('--cuda', type=str, default='false',
+    parser.add_argument('--cuda', type=str, default='True',
                         help='Whether to use GPU or not (default `false`).')
     parser.add_argument('--num_gpus', type=int, default=1,
                         help='Number of GPUs to use (default `1`).')
@@ -92,6 +92,8 @@ def add_parsers():
                         help='Path to save models/results (default `./e2u_output`).')
     parser.add_argument('--log_file', type=str, default='./out_log.log',
                         help='Path to save log file (default `./out_log.log`).')
+    parser.add_argument('--take_last_frame', type=str, default='false',
+                        help='Consider the last frame of the signal to compute loss/metric (default `False`).')
 
     parser.add_argument('--model_name', type=str, default='resnet18',
                         help='Which visual model to use. (default `resnet18`).')
